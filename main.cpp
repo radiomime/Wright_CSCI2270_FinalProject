@@ -56,14 +56,18 @@ int main(int argc, const char * argv[]) {
                 string barName;
                 int x;
                 int y;
+                int altitude;
                 bool correctInfo = false;
                 
                 // Get Info about the bar:
                 cout<<"\nWhat's the bar named? (No Commas Please!)"<<endl;
                 cin>>ws;
                 getline(cin, barName);
-                cout<<"Where is the bar located ? (eastwestValue northsouthValue)"<<endl;
+                cout<<"Where is the bar located? East west value, then north south value. ('0-9' '0-9')"<<endl;
                 cin>>x>>y;
+                cout<<"What is the (Relative) Altitude of the bar in feet?"<<endl;
+                cin>>altitude;
+                
                 // Loop if info is incorrect/impossible
                 if (x > -1 && x < 11 && y > -1 && y < 11) {
                     correctInfo = true;
@@ -78,7 +82,7 @@ int main(int argc, const char * argv[]) {
                 }
                 
                 // Call function to add a bar to the graph of my bars
-                myBarGraph.addABar(barName, x, y);
+                myBarGraph.addABar(barName, x, y, altitude);
                 
             }
             else if (responseLevelTwo == 2) {
@@ -89,6 +93,7 @@ int main(int argc, const char * argv[]) {
             
             else if (responseLevelTwo ==3){
                 Continue = true;
+                
             }
             else{
                 cout<<"Incorrect input"<<endl;
@@ -97,7 +102,9 @@ int main(int argc, const char * argv[]) {
         }
         Continue = false;
         myBarGraph.AdjacentBarMenu();
+        myBarGraph.printCity();
         back = true;
+        
     }
     
     
@@ -136,7 +143,7 @@ int main(int argc, const char * argv[]) {
                         cin>>ws;
                         getline(cin, endBar);
                         myBarGraph.shortestPath(startBar, endBar);
-                        break;
+                        //break;
                     }
                     else if (responseLevelTwo == 2) {
                         cout<<"Enter a starting bar: ";
@@ -146,11 +153,15 @@ int main(int argc, const char * argv[]) {
                         cin>>ws;
                         getline(cin, endBar);
                         myBarGraph.shortestDistance(startBar, endBar);
-                        break;
+                        //break;
                     }
                     else if (responseLevelTwo == 3) {
                         back = true;
-                        break;
+                        //break;
+                    }
+                    else{
+                        cout<<"Invalid Input!"<<endl;
+                        
                     }
                 }
                 break;
@@ -160,7 +171,7 @@ int main(int argc, const char * argv[]) {
                 break;
             default:
                 cout<<"Invalid Input"<<endl;
-                quit = true;
+                quit = false;
                 break;
         }
         
