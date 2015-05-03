@@ -42,23 +42,29 @@ bool barGraph::isThereABarHere(int x, int y){
 
 void barGraph::AdjacentBarMenu(){
     string adjBarString;
+    //int count = 0;
     
     cout<<"Now lets find out which bars are adjacent to each other"<<endl;
     
     for (int i = 0; i<vertices.size()-1; i++) {
-        cout<<"Please separate bar names with commas. Following is a list of bars to choose from:\n         ";
+        
+        cout<<"\nPlease separate bar names with commas. Following is a list of bars to choose from:\n         ";
         for (int j = i+1; j < vertices.size(); j++) {
             cout<<vertices[j].barName<<",";
         }
         
-        cout<<"\n\nAdjacent Bars to "<<vertices[i].barName<<" (separated by commas):"<<endl;
-        getline(cin, adjBarString);
+        cout<<"\n\nAdjacent Bars to "<<vertices[i].barName<<" (separated by commas. If none of the available bars are adjacent, write NONE):"<<endl;
+        if (i == 0) {
+            getline(cin, adjBarString);
+        }
+        //count++;
         getline(cin, adjBarString);
         istringstream ss(adjBarString);
         string adjBarName;
-        
-        while(getline(ss, adjBarName, ',')) {
-            addAdjacentBars(vertices[i].barName, adjBarName);
+        if (adjBarName != "NONE") {
+            while(getline(ss, adjBarName, ',')) {
+                addAdjacentBars(vertices[i].barName, adjBarName);
+            }
         }
     }
 }
@@ -167,14 +173,21 @@ void barGraph::printVertices(){
 
 
 int barGraph::findWeight(vertex *barOne, vertex *destBar){
+    double doubleWeight;
+    int weight;
     
-    int a = destBar->xValue - barOne->xValue;
-    int b = destBar->yValue - barOne->yValue;
+    double a = destBar->xValue - barOne->xValue;
+    double b = destBar->yValue - barOne->yValue;
+    double altDiff = destBar->altitude - barOne->altitude;
     
     a = a*a;
     b = b*b;
     
-    return a+b;
+    doubleWeight = (a + b) + (a+b)*(altDiff*1/2500);
+    
+    weight = (int)(doubleWeight);
+    
+    return weight;
 }
 
 
@@ -190,7 +203,7 @@ int barGraph::findWeight(vertex *barOne, vertex *destBar){
 
 
 
-void barGraph::addABar(std::string barName, int xValue, int yValue){
+void barGraph::addABar(std::string barName, int xValue, int yValue, int altitude){
     bool added;
     vertex* newBar;
     string adjBarString;
@@ -199,7 +212,7 @@ void barGraph::addABar(std::string barName, int xValue, int yValue){
     
     // Add the vertex to the graph
     
-    added = addVertex(barName, xValue, yValue);
+    added = addVertex(barName, xValue, yValue, altitude);
     
     /* Adjacent bars.
      Here we will add all of the adjacent bars, or reachable bars, to the current vertex. We don't want to run into the police, and we want the weight between the bars to be reflective of both the distance and the amount of hill between each bar. God knows we don't want to be walking up a 45 percent grade just to get to another pub.
@@ -226,7 +239,7 @@ void barGraph::addABar(std::string barName, int xValue, int yValue){
  
  */
 
-bool barGraph::addVertex(std::string barName, int xValue, int yValue){
+bool barGraph::addVertex(std::string barName, int xValue, int yValue, int altitude){
     bool added = false;
     bool found = false;
     
@@ -243,6 +256,7 @@ bool barGraph::addVertex(std::string barName, int xValue, int yValue){
         x.barName = barName;
         x.xValue = xValue;
         x.yValue = yValue;
+        x.altitude = altitude;
         x.barScene = -1;
         vertices.push_back(x);
         added = true;
@@ -280,25 +294,6 @@ void barGraph::addEdge(std::string nameOne, std::string nameTwo, int barOnetoTwo
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 int barGraph::barSceneMax(){
     int max = -1;
@@ -376,11 +371,11 @@ void barGraph::shortestPath(std::string starting, std::string destination)
     }
     if(start == NULL || ending == NULL)
     {
-        cout<<"One or more cities doesn't exist"<<endl;
+        cout<<"One or more bars doesn't exist"<<endl;
     }
     else if(start->barScene != ending->barScene)
     {
-        cout<<"No safe path between cities"<<endl;
+        cout<<"No safe path between bars. The Police are errywhere."<<endl;
     }
     else if(start->barScene == -1 || ending->barScene == -1)
     {
@@ -431,7 +426,7 @@ void barGraph::shortestPath(std::string starting, std::string destination)
             path.push_back(x->barName);
             x=x->previous;
         }
-        cout<<minDistance<<", " <<path[path.size()-1];
+        cout<<minDistance+1<<", " <<path[path.size()-1];
         for(int i = path.size()-2; i>-1; i--)
         {
             cout<<", " <<path[i];
@@ -472,11 +467,11 @@ void barGraph::shortestDistance(std::string starting, std::string destination)
     }
     if(start == NULL || ending == NULL)
     {
-        cout<<"One or more cities doesn't exist"<<endl;
+        cout<<"Some of those bars don't even exist. You trippin."<<endl;
     }
     else if(start->barScene != ending->barScene)
     {
-        cout<<"No safe path between cities"<<endl;
+        cout<<"No safe path between bars. The Police are errywhere."<<endl;
     }
     else if(start->barScene == -1 || ending->barScene == -1)
     {
