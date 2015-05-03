@@ -30,6 +30,7 @@ struct vertex{
     int distance;
     int xValue;
     int yValue;
+    int altitude;
     vertex *previous;
     std::vector<adjVertex> adj;
 };
@@ -44,9 +45,9 @@ public:
     bool isThereABarHere(int x, int y);
     void addAdjacentBars(std::string barName, std::string adjBarName);
     void AdjacentBarMenu();
-    void addABar(std::string barName, int xValue, int yValue);
+    void addABar(std::string barName, int xValue, int yValue, int altitude);
     void addEdge(std::string nameOne, std::string nameTwo, int barOne, int barTwo);
-    bool addVertex(std::string name, int xValue, int yValue);
+    bool addVertex(std::string name, int xValue, int yValue, int altitude);
     int findWeight(vertex* barOne, vertex* destBar);
     void printVertices();
     int barSceneMax();
