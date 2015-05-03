@@ -7,7 +7,7 @@ The Perfect Bar Crawl.
 
   ~ Description:
   
-In this project I'm going to allow users to input information about different pubs and bars. The user will be able to associate each bar with score quantifying relative elevation, average line size, food quality, drink quality, average prices, relative locations, etc.
+In this project I'm going to allow users to input information about the location of different pubs and bars, and create an ideal bar crawl between bars. 
 
   ~ Plan of Attack:
 
@@ -16,3 +16,7 @@ I'm going to construct a series of weighted graphs, and will have functions that
   ~ Intended output:
   
 The program will use algorithms to find and output the best path for the night.
+
+  ~ Use:
+  
+The user will first enter bars names, and their position in a 10 by 10 city, then for each bar they will decide which bars are adjacent (without redundancy). After this, each user will be able to print a map of the city, to see where bars are located, or, more precisely, which spots in the city have a bar. They will be able to find the shortest path between bars while avoiding the police, and the easiest way to travel between bars.
